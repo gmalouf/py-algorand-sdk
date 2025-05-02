@@ -60,21 +60,6 @@ jobs:
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
 
-      - name: Merge Pull Request
-        uses: actions/github-script@v7
-        id: merge_pr
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const prNumber = parseInt('${{ github.event.inputs.release_pr_number }}', 10);
-            const result = await github.rest.pulls.merge({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber,
-            });
-
-            core.setOutput('merged', result.data.merged);
-
       - name: Ensure latest changes from merged PR
         run: |
           git fetch origin ${{ steps.get_pr_info.outputs.BASE_BRANCH }}
